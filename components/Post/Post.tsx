@@ -38,11 +38,11 @@ const Post: React.FC<PostProps> = ({
                     <Button>Follow</Button>
                 </CardAction>
             </CardHeader>
-            <CardContent className='w-full aspect-square overflow-hidden'>
+            <CardContent className='aspect-square w-full overflow-hidden'>
                 <img
                     src={'/tibia.png'}
                     alt='Post'
-                    className='w-full h-full object-cover'
+                    className='h-full w-full object-cover'
                 />
             </CardContent>
 
