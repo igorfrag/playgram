@@ -7,7 +7,7 @@ export default function LoginPage() {
     const [isRegistering, setIsRegistering] = useState(false);
 
     return (
-        <div className='flex min-h-svh w-full items-center justify-evenly p-6 md:p-10'>
+        <div className='mx-auto flex min-h-svh max-w-5xl items-center justify-evenly'>
             <div className='max-lg:hidden'>
                 <img src={'/logo.png'} alt='Playgram! Logo' />
             </div>

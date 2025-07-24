@@ -35,7 +35,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
     return (
         <>
-            <Card className='flex w-full flex-col'>
+            <Card className='flex w-full flex-col rounded-none border-0 shadow-none'>
                 <div className='grid w-full grid-cols-3 grid-rows-2 items-center'>
                     <img
                         className='col-span-1 row-span-2 m-6 mx-auto aspect-square w-32 self-center rounded-full object-contain max-sm:w-[80px]'
@@ -76,7 +76,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                     </CardContent>
                 </div>
             </Card>
-            <Card className='min-sm:hidden flex w-full flex-col items-center'>
+            <Card className='min-sm:hidden flex w-full flex-col items-center rounded-none'>
                 <CardContent>
                     <div className='mx-auto grid grid-cols-3 gap-4'>
                         {HeaderCounters.map((item, index) => (
