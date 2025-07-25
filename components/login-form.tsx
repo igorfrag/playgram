@@ -1,3 +1,6 @@
+'use client';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,6 +18,38 @@ type LoginFormProps = {
 };
 
 export function LoginForm({ setIsRegistering }: LoginFormProps) {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const router = useRouter();
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError('');
+        try {
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/users/login`,
+                {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password }),
+                }
+            );
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                setError(data?.error || 'Login failed');
+                return;
+            }
+
+            router.push('/');
+        } catch (err) {
+            setError('Internal server error');
+        }
+    };
+
     return (
         <div className={cn('flex flex-col gap-6')}>
             <h1 className='mb-4 text-center text-2xl font-bold'>Playgram!</h1>
@@ -26,7 +61,7 @@ export function LoginForm({ setIsRegistering }: LoginFormProps) {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className='flex flex-col gap-6'>
                             <div className='grid gap-3'>
                                 <Label htmlFor='email'>Email</Label>
@@ -34,6 +69,9 @@ export function LoginForm({ setIsRegistering }: LoginFormProps) {
                                     id='email'
                                     type='email'
                                     placeholder='m@example.com'
+                                    onChange={(e) => {
+                                        setEmail(e.target.value);
+                                    }}
                                     required
                                 />
                             </div>
@@ -47,7 +85,14 @@ export function LoginForm({ setIsRegistering }: LoginFormProps) {
                                         Forgot your password?
                                     </a>
                                 </div>
-                                <Input id='password' type='password' required />
+                                <Input
+                                    id='password'
+                                    type='password'
+                                    required
+                                    onChange={(e) => {
+                                        setPassword(e.target.value);
+                                    }}
+                                />
                             </div>
                             <div className='flex flex-col gap-3'>
                                 <Button type='submit' className='w-full'>

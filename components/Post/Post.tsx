@@ -9,28 +9,40 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Button } from '../ui/button';
+import { formatTimeAgo } from '@/lib/utils';
+import type { Post as PostType } from '@/lib/api';
 
 interface PostProps {
-    children: ReactNode;
-    username?: string;
+    post: PostType;
     guildname?: string;
 }
 
-const Post: React.FC<PostProps> = ({
-    children,
-    username = 'Username',
-    guildname = 'Guildname',
-}) => {
+const Post: React.FC<PostProps> = ({ post, guildname = 'Guild' }) => {
+    const {
+        user,
+        caption,
+        imageUrl,
+        createdAt,
+        commentsCount,
+        likesCount,
+        isLiked,
+    } = post;
+
     return (
         <Card className='w-3/4'>
             <CardHeader>
                 <div className='flex items-center gap-4'>
-                    <img
-                        width={50}
-                        height={50}
-                        src={'https://avatar.iran.liara.run/public/17'}
-                    ></img>
-                    <CardTitle>{username}</CardTitle>
+                    <a href={`/profile/${user.id}`}>
+                        <img
+                            className='rounded-full'
+                            width={50}
+                            height={50}
+                            src={user.profilePicture || '/user/avatar.jpg'}
+                        ></img>
+                    </a>
+                    <a href={`/profile/${user.id}`}>
+                        <CardTitle>{user.username}</CardTitle>
+                    </a>
                     <CardDescription>{guildname}</CardDescription>
                 </div>
 
@@ -40,7 +52,7 @@ const Post: React.FC<PostProps> = ({
             </CardHeader>
             <CardContent className='aspect-square w-full overflow-hidden'>
                 <img
-                    src={'/tibia.png'}
+                    src={process.env.NEXT_PUBLIC_API_URL + imageUrl}
                     alt='Post'
                     className='h-full w-full object-cover'
                 />
@@ -49,14 +61,14 @@ const Post: React.FC<PostProps> = ({
             <CardContent>
                 <p>
                     <span className='font-bold'>
-                        {username} [{guildname}]
+                        {user.username} [{guildname}]
                     </span>{' '}
-                    {children}
+                    {caption}
                 </p>
             </CardContent>
 
             <CardFooter>
-                <p>4 hours ago</p>
+                <p>{formatTimeAgo(createdAt)}</p>
             </CardFooter>
         </Card>
     );

@@ -1,14 +1,51 @@
+'use client';
+
+import { getUserPosts, Post as PostType } from '@/lib/api';
+import { useEffect, useState } from 'react';
+import ProfilePost from './ProfilePost';
+
 interface ProfilePostsContainerProp {
-    className?: string;
-    children?: React.ReactNode;
+    userId: number;
 }
 
 const ProfilePostsContainer: React.FC<ProfilePostsContainerProp> = ({
-    className,
-    children,
+    userId,
 }) => {
+    const [posts, setPosts] = useState<PostType[] | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchUserPosts = async () => {
+            try {
+                const data = await getUserPosts(userId);
+                setPosts(data);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserPosts();
+    }, []);
+
+    if (loading) return <p>Loading...</p>;
+    if (!posts) return <p>No posts</p>;
+
     return (
-        <div className={`grid w-full grid-cols-3 ${className}`}>{children}</div>
+        <div className={`grid w-full grid-cols-3`}>
+            {posts.map((post, index) => {
+                return (
+                    <ProfilePost
+                        key={index}
+                        postComments={post.commentsCount}
+                        postLikes={post.likesCount}
+                        imageUrl={post.imageUrl}
+                        caption={post.caption}
+                    />
+                );
+            })}
+        </div>
     );
 };
 
