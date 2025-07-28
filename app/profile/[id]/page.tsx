@@ -13,20 +13,20 @@ export default function ProfilePage() {
     const [profile, setProfile] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchProfile = async () => {
-            try {
-                const data = await getUserById(userId);
-                setProfile(data);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
-        };
+    const fetchProfile = async () => {
+        try {
+            const data = await getUserById(userId);
+            setProfile(data);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         fetchProfile();
-    }, []);
+    }, [userId]);
 
     if (loading) return <p>Loading...</p>;
     if (!profile) return <p>Profile not found</p>;
@@ -38,6 +38,9 @@ export default function ProfilePage() {
                 posts={profile.postsCount}
                 followers={profile.followerCount}
                 following={profile.followingCount}
+                userId={profile.id}
+                onFollowChange={() => fetchProfile()}
+                isFollowing={profile.isFollowing}
             >
                 {profile.bio}
             </ProfileHeader>

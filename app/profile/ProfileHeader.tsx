@@ -16,6 +16,9 @@ interface ProfileHeaderProps {
     following?: number;
     username?: string;
     guildname?: string;
+    isFollowing: boolean;
+    userId: number;
+    onFollowChange?: () => void;
 }
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({
@@ -26,6 +29,9 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     following,
     username = 'Username',
     guildname = 'Guildname',
+    onFollowChange,
+    isFollowing,
+    userId,
 }) => {
     const HeaderCounters = [
         { label: 'Posts', value: posts },
@@ -39,15 +45,18 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 <div className='grid w-full grid-cols-3 grid-rows-2 items-center'>
                     <img
                         className='col-span-1 row-span-2 m-6 mx-auto aspect-square w-32 self-center rounded-full object-contain max-sm:w-[80px]'
-                        src={imgSrc}
+                        src={imgSrc || '/user/avatar.jpg'}
                     />
                     <div className='min-sm:col-start-2 min-sm:col-span-1 align-center col-span-2 col-start-2 flex justify-center gap-6'>
                         <CardTitle>{username}</CardTitle>
                         <CardDescription>{guildname}</CardDescription>
                     </div>
                     <ProfileHeaderAction
+                        userId={userId}
                         className='min-sm:row-start-1 min-sm:col-start-3 min-sm:col-span-1 col-span-2 col-start-2 row-start-2'
-                        isGuildRecruiter
+                        isGuildRecruiter={false}
+                        onFollowChange={onFollowChange}
+                        isFollowing={isFollowing}
                     />
                     <Card className='col-span-2 col-start-2 row-start-2 flex w-full items-center border-0 shadow-none max-sm:hidden'>
                         <CardContent className='w-full px-0'>

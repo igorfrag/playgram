@@ -22,7 +22,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 // ============ LOGIN  ============
 export const loginUser = async (email: string, password: string) => {
-    const res = await fetch(`${apiUrl}` + `auth/login`, {
+    const res = await fetch(`${apiUrl}` + `users/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -141,5 +141,16 @@ export const getUserById = async (
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Error fetching user');
+    return data;
+};
+
+export const toggleFollowUser = async (id: number) => {
+    const res = await fetch(`${apiUrl}` + `users/${id}/follow`, {
+        method: 'POST',
+        credentials: 'include',
+        cache: 'no-store',
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Error following user');
     return data;
 };
