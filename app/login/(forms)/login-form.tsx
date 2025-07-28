@@ -1,3 +1,6 @@
+'use client';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
@@ -9,24 +12,46 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { loginUser } from '@/lib/api';
 
-type SignupFormProps = {
+type LoginFormProps = {
     setIsRegistering: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export function SignupForm({ setIsRegistering }: SignupFormProps) {
+export function LoginForm({ setIsRegistering }: LoginFormProps) {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const router = useRouter();
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError('');
+        try {
+            const data = await loginUser(email, password);
+            if (!data) {
+                setError(data?.error || 'Login failed');
+                return;
+            }
+
+            router.push('/');
+        } catch (err) {
+            setError('Internal server error');
+        }
+    };
+
     return (
         <div className={cn('flex flex-col gap-6')}>
             <h1 className='mb-4 text-center text-2xl font-bold'>Playgram!</h1>
             <Card>
                 <CardHeader>
-                    <CardTitle>Register a new Account</CardTitle>
+                    <CardTitle>Login to your account</CardTitle>
                     <CardDescription>
-                        Enter your email below to sign up for a new account.
+                        Enter your email below to login to your account
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className='flex flex-col gap-6'>
                             <div className='grid gap-3'>
                                 <Label htmlFor='email'>Email</Label>
@@ -34,50 +59,48 @@ export function SignupForm({ setIsRegistering }: SignupFormProps) {
                                     id='email'
                                     type='email'
                                     placeholder='m@example.com'
+                                    onChange={(e) => {
+                                        setEmail(e.target.value);
+                                    }}
                                     required
                                 />
                             </div>
                             <div className='grid gap-3'>
-                                <Label htmlFor='username'>Username</Label>
-                                <Input
-                                    id='username '
-                                    type='text'
-                                    placeholder='Username'
-                                    required
-                                />
-                            </div>
-                            <div className='grid gap-3'>
-                                <div className='items-center'>
+                                <div className='flex items-center'>
                                     <Label htmlFor='password'>Password</Label>
-                                </div>
-                                <Input id='password' type='password' required />
-                            </div>
-                            <div className='grid gap-3'>
-                                <div className='items-center'>
-                                    <Label htmlFor='confirm-password'>
-                                        Confirm Password
-                                    </Label>
+                                    <a
+                                        href='#'
+                                        className='ml-auto inline-block text-sm underline-offset-4 hover:underline'
+                                    >
+                                        Forgot your password?
+                                    </a>
                                 </div>
                                 <Input
-                                    id='confirm-password'
+                                    id='password'
                                     type='password'
                                     required
+                                    onChange={(e) => {
+                                        setPassword(e.target.value);
+                                    }}
                                 />
                             </div>
                             <div className='flex flex-col gap-3'>
-                                <Button type='submit' className='w-full'>
+                                <Button
+                                    type='submit'
+                                    className='w-full cursor-pointer'
+                                >
                                     Login
                                 </Button>
                             </div>
                         </div>
                         <div className='mt-4 text-center text-sm'>
-                            Have an account?{' '}
+                            Don&apos;t have an account?{' '}
                             <a
                                 href='#'
                                 className='underline underline-offset-4'
-                                onClick={() => setIsRegistering(false)}
+                                onClick={() => setIsRegistering(true)}
                             >
-                                Log in
+                                Sign up
                             </a>
                         </div>
                     </form>

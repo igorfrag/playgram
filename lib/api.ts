@@ -40,6 +40,49 @@ export const loginUser = async (email: string, password: string) => {
     return data.user;
 };
 
+// ============ REGISTER  ============
+export const registerUser = async (
+    email: string,
+    username: string,
+    fullName: string,
+    password: string
+) => {
+    const res = await fetch(`${apiUrl}` + `users/register`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ email, username, fullName, password }),
+    });
+
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Login failed');
+    }
+
+    const data = await res.json();
+    return data;
+};
+// ============ GET ME  ============
+export const getMe = async () => {
+    const res = await fetch(`${apiUrl}` + `users/me`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+    });
+
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Get me failed');
+    }
+
+    const result = await res.json();
+    return result.data;
+};
+
 // -------------- POSTS --------------------
 
 // ============ GET POST ============
