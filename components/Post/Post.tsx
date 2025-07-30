@@ -11,6 +11,8 @@ import {
 import { Button } from '../ui/button';
 import { formatTimeAgo } from '@/lib/utils';
 import type { Post as PostType } from '@/lib/api';
+import { LikeButton } from './LikeButton';
+import CommentList from './CommentList';
 
 interface PostProps {
     post: PostType;
@@ -19,6 +21,7 @@ interface PostProps {
 
 const Post: React.FC<PostProps> = ({ post, guildname = 'Guild' }) => {
     const {
+        id,
         user,
         caption,
         imageUrl,
@@ -57,6 +60,13 @@ const Post: React.FC<PostProps> = ({ post, guildname = 'Guild' }) => {
                     className='h-full w-full object-cover'
                 />
             </CardContent>
+            <CardContent>
+                <LikeButton
+                    postId={id}
+                    isLiked={isLiked}
+                    likesCount={likesCount}
+                />
+            </CardContent>
 
             <CardContent>
                 <p>
@@ -65,6 +75,9 @@ const Post: React.FC<PostProps> = ({ post, guildname = 'Guild' }) => {
                     </span>{' '}
                     {caption}
                 </p>
+            </CardContent>
+            <CardContent>
+                <CommentList postId={id} />
             </CardContent>
 
             <CardFooter>

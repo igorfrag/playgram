@@ -138,6 +138,59 @@ export const getUserPosts = async (userId: number): Promise<Post[]> => {
     if (!res.ok) throw new Error(json.error || 'Error fetching posts');
     return json.data.posts;
 };
+//============ POST TOGGLE LIKE  ============
+export const togglePostLike = async (postId: number) => {
+    const res = await fetch(`${apiUrl}posts/${postId}/like`, {
+        method: 'POST',
+        credentials: 'include',
+        cache: 'no-store',
+    });
+
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Error liking/unliking post');
+    }
+
+    return res.json();
+};
+
+// -------------- COMMENTS --------------------
+
+//============ GET POST COMMENTS  ============
+export async function getCommentsByPostId(postId: number) {
+    const res = await fetch(`${apiUrl}comments/${postId}`, {
+        method: 'GET',
+        credentials: 'include',
+        cache: 'no-store',
+    });
+
+    if (!res.ok) {
+        throw new Error('Error fetching comments');
+    }
+
+    const result = await res.json();
+    return result.data;
+}
+//============ POST NEW COMMENT  ============
+export const createCommentOnPost = async (postId: number, content: string) => {
+    const res = await fetch(`${apiUrl}comments/${postId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        cache: 'no-store',
+        body: JSON.stringify({ content }),
+    });
+
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Error commenting on post');
+    }
+    const result = await res.json();
+    console.log(result);
+    return result.data;
+};
 
 // -------------- USERS --------------------
 
