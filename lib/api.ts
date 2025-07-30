@@ -100,6 +100,26 @@ export const getPostById = async (
     if (!res.ok) throw new Error(json.error || 'Error fetching post');
     return json.data.post;
 };
+// ============ POST NEW POST ============
+export const createNewPost = async (
+    caption: string,
+    image: File
+): Promise<Post> => {
+    const formData = new FormData();
+    formData.append('caption', caption);
+    formData.append('image', image);
+
+    const res = await fetch(`${apiUrl}` + `posts/new`, {
+        method: 'POST',
+        body: formData,
+        credentials: 'include',
+        cache: 'no-store',
+    });
+
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.error || 'Error creating post');
+    return json.data.post;
+};
 
 //============ GET FEED ============
 export const getUserFeed = async (token?: string): Promise<Post[]> => {
