@@ -86,12 +86,8 @@ export const getMe = async () => {
 // -------------- POSTS --------------------
 
 // ============ GET POST ============
-export const getPostById = async (
-    postId: number,
-    token?: string
-): Promise<Post> => {
+export const getPostById = async (postId: number): Promise<Post> => {
     const res = await fetch(`${apiUrl}` + `posts/${postId}`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         credentials: 'include',
         cache: 'no-store',
     });
@@ -122,9 +118,8 @@ export const createNewPost = async (
 };
 
 //============ GET FEED ============
-export const getUserFeed = async (token?: string): Promise<Post[]> => {
+export const getUserFeed = async (): Promise<Post[]> => {
     const res = await fetch(`${apiUrl}` + `posts/`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         credentials: 'include',
         cache: 'no-store',
     });
@@ -134,12 +129,8 @@ export const getUserFeed = async (token?: string): Promise<Post[]> => {
 };
 
 //============ GET USER POSTS  ============
-export const getUserPosts = async (
-    userId: number,
-    token?: string
-): Promise<Post[]> => {
+export const getUserPosts = async (userId: number): Promise<Post[]> => {
     const res = await fetch(`${apiUrl}` + `users/${userId}/posts`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         credentials: 'include',
         cache: 'no-store',
     });
@@ -150,12 +141,8 @@ export const getUserPosts = async (
 
 // -------------- USERS --------------------
 
-export const getUserById = async (
-    id: number,
-    token?: string
-): Promise<UserPreview> => {
+export const getUserById = async (id: number): Promise<UserPreview> => {
     const res = await fetch(`${apiUrl}` + `users/id/${id}`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         credentials: 'include',
         cache: 'no-store',
     });
