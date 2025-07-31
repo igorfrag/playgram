@@ -1,6 +1,7 @@
 'use client';
 
-import { getUserPosts, Post as PostType } from '@/lib/api';
+import { getUserPosts } from '@/lib/api';
+import type { Post as PostType } from '@/types';
 import { useEffect, useState } from 'react';
 import ProfilePost from './ProfilePost';
 
@@ -33,7 +34,7 @@ const ProfilePostsContainer: React.FC<ProfilePostsContainerProp> = ({
     if (!posts) return <p>No posts</p>;
 
     return (
-        <div className={`grid w-full grid-cols-3`}>
+        <div className={`max-xs:grid-cols-2 grid w-full grid-cols-3`}>
             {posts.map((post, index) => {
                 return (
                     <ProfilePost

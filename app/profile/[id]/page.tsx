@@ -31,7 +31,7 @@ export default function ProfilePage() {
     if (loading) return <p>Loading...</p>;
     if (!profile) return <p>Profile not found</p>;
     return (
-        <div className='mx-auto flex h-fit w-full max-w-5xl flex-col items-center bg-black'>
+        <div className='mx-auto flex h-fit w-full max-w-5xl flex-col items-center overflow-x-hidden bg-black'>
             <ProfileHeader
                 username={profile.username}
                 imgSrc={profile.profilePicture}

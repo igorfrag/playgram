@@ -48,12 +48,12 @@ const Post: React.FC<PostProps> = ({
     };
 
     return (
-        <Card className='w-3/4'>
+        <Card className='w-3/4 max-sm:w-full max-sm:gap-1 max-sm:rounded-none max-sm:border-0 max-sm:border-t-2'>
             <CardHeader>
                 <div className='flex items-center gap-4'>
                     <a href={`/profile/${user.id}`}>
                         <img
-                            className='rounded-full'
+                            className='rounded-full max-sm:max-w-[30px]'
                             width={50}
                             height={50}
                             src={user.profilePicture || '/user/avatar.jpg'}
@@ -71,14 +71,14 @@ const Post: React.FC<PostProps> = ({
                     <Button>Follow</Button>
                 </CardAction>
             </CardHeader>
-            <CardContent className='aspect-square w-full overflow-hidden'>
+            <CardContent className='aspect-square w-full overflow-hidden max-sm:px-0'>
                 <img
                     src={process.env.NEXT_PUBLIC_API_URL + imageUrl}
                     alt='Post'
                     className='h-full w-full object-cover'
                 />
             </CardContent>
-            <CardContent className='flex gap-5'>
+            <CardContent className='max-sm: flex items-center justify-center gap-5'>
                 <LikeButton
                     postId={id}
                     isLiked={isLiked}
@@ -91,7 +91,7 @@ const Post: React.FC<PostProps> = ({
                 />
             </CardContent>
 
-            <CardContent>
+            <CardContent className='text-pretty text-left max-sm:px-2 max-sm:pt-2'>
                 <p>
                     <span className='font-bold'>
                         {user.username} {guildname ? `[${guildname}]` : ''}
@@ -110,7 +110,7 @@ const Post: React.FC<PostProps> = ({
             </CardContent>
 
             <CardFooter>
-                <p>{formatTimeAgo(createdAt)}</p>
+                <p className='text-gray-500'>{formatTimeAgo(createdAt)}</p>
             </CardFooter>
         </Card>
     );

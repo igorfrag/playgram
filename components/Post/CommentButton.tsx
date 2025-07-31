@@ -19,7 +19,7 @@ export function CommentButton({
         <div className='mt-2 flex items-center gap-2'>
             <Button variant={'outline'} size='sm' onClick={onToggle}>
                 <MessageCircleMore />
-                <span className='ml-1'>Comment</span>
+                <span className='ml-1 max-sm:hidden'>Comment</span>
             </Button>
             <span className='text-muted-foreground text-sm'>
                 {commentsCount}

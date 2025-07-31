@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Post as PostType, getUserFeed } from '@/lib/api';
+import { getUserFeed } from '@/lib/api';
+import type { Post as PostType } from '@/types';
 import PostContainer from '@/components/Post/PostContainer';
 
 interface FeedContainerProps {}

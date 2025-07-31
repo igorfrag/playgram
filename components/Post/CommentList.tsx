@@ -9,8 +9,7 @@ interface CommentListProps {
 const CommentList: React.FC<CommentListProps> = ({ comments }) => {
     return (
         <>
-            {/* <CommentForm postId={postId} onCommentPosted={fetchComments} /> */}
-            <div className='mt-4 space-y-4'>
+            <div className='mt-4 space-y-3 max-sm:space-y-0'>
                 {comments.map((comment) => (
                     <div key={comment.id} className='flex gap-2'>
                         <a href={`/profile/${comment.user.id}`}>
@@ -19,7 +18,7 @@ const CommentList: React.FC<CommentListProps> = ({ comments }) => {
                                     comment.user.profilePicture ||
                                     '/default-avatar.png'
                                 }
-                                className='h-10 w-10 rounded-full'
+                                className='w-12 rounded-full max-sm:max-w-[30px]'
                             />
                         </a>
                         <div className='text-sm'>

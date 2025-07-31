@@ -40,7 +40,9 @@ export function LikeButton({ postId, isLiked, likesCount }: LikeButtonProps) {
                 disabled={loading}
             >
                 <Heart className={`h-4 w-4 ${liked ? 'fill-white' : ''}`} />
-                <span className='ml-1'>{liked ? 'Liked' : 'Like'}</span>
+                <span className='ml-1 max-sm:hidden'>
+                    {liked ? 'Liked' : 'Like'}
+                </span>
             </Button>
             <span className='text-muted-foreground text-sm'>{count}</span>
         </div>
