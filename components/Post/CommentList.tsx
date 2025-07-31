@@ -1,43 +1,15 @@
-'use client';
-import { getCommentsByPostId } from '@/lib/api';
 import { formatTimeAgo } from '@/lib/utils';
-import React, { useState, useEffect } from 'react';
-import CommentForm from './CommentForm';
+import React from 'react';
+import type { Comment } from '@/types';
 
 interface CommentListProps {
-    postId: number;
+    comments: Comment[];
 }
 
-type Comment = {
-    id: number;
-    content: string;
-    createdAt: string;
-    user: {
-        id: number;
-        username: string;
-        profilePicture?: string;
-    };
-};
-
-const CommentList: React.FC<CommentListProps> = ({ postId }) => {
-    const [comments, setComments] = useState<Comment[]>([]);
-
-    const fetchComments = async () => {
-        try {
-            const data = await getCommentsByPostId(postId);
-            setComments(data);
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    useEffect(() => {
-        fetchComments();
-    }, [postId]);
-
+const CommentList: React.FC<CommentListProps> = ({ comments }) => {
     return (
         <>
-            <CommentForm postId={postId} onCommentPosted={fetchComments} />
+            {/* <CommentForm postId={postId} onCommentPosted={fetchComments} /> */}
             <div className='mt-4 space-y-4'>
                 {comments.map((comment) => (
                     <div key={comment.id} className='flex gap-2'>

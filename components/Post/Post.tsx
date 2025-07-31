@@ -1,4 +1,5 @@
-import React, { ReactNode } from 'react';
+'use client';
+import React, { useState } from 'react';
 import {
     Card,
     CardAction,
@@ -10,16 +11,25 @@ import {
 } from '@/components/ui/card';
 import { Button } from '../ui/button';
 import { formatTimeAgo } from '@/lib/utils';
-import type { Post as PostType } from '@/lib/api';
+import type { Comment, Post as PostType } from '@/types';
 import { LikeButton } from './LikeButton';
 import CommentList from './CommentList';
+import { CommentButton } from './CommentButton';
+import CommentForm from './CommentForm';
 
 interface PostProps {
     post: PostType;
     guildname?: string;
+    comments: Comment[];
+    onCommentPosted: () => void;
 }
 
-const Post: React.FC<PostProps> = ({ post, guildname = 'Guild' }) => {
+const Post: React.FC<PostProps> = ({
+    post,
+    guildname = 'Guild',
+    comments,
+    onCommentPosted,
+}) => {
     const {
         id,
         user,
@@ -30,6 +40,12 @@ const Post: React.FC<PostProps> = ({ post, guildname = 'Guild' }) => {
         likesCount,
         isLiked,
     } = post;
+
+    const [showComments, setShowComments] = useState(false);
+
+    const handleToggleComments = () => {
+        setShowComments((prev) => !prev);
+    };
 
     return (
         <Card className='w-3/4'>
@@ -46,7 +62,9 @@ const Post: React.FC<PostProps> = ({ post, guildname = 'Guild' }) => {
                     <a href={`/profile/${user.id}`}>
                         <CardTitle>{user.username}</CardTitle>
                     </a>
-                    <CardDescription>{guildname}</CardDescription>
+                    <CardDescription>
+                        {guildname ? guildname : ''}
+                    </CardDescription>
                 </div>
 
                 <CardAction>
@@ -60,24 +78,35 @@ const Post: React.FC<PostProps> = ({ post, guildname = 'Guild' }) => {
                     className='h-full w-full object-cover'
                 />
             </CardContent>
-            <CardContent>
+            <CardContent className='flex gap-5'>
                 <LikeButton
                     postId={id}
                     isLiked={isLiked}
                     likesCount={likesCount}
+                />
+                <CommentButton
+                    postId={id}
+                    commentsCount={comments.length}
+                    onToggle={handleToggleComments}
                 />
             </CardContent>
 
             <CardContent>
                 <p>
                     <span className='font-bold'>
-                        {user.username} [{guildname}]
+                        {user.username} {guildname ? `[${guildname}]` : ''}
                     </span>{' '}
                     {caption}
                 </p>
             </CardContent>
             <CardContent>
-                <CommentList postId={id} />
+                {showComments && (
+                    <CommentForm
+                        postId={id}
+                        onCommentPosted={onCommentPosted}
+                    />
+                )}
+                <CommentList comments={comments} />
             </CardContent>
 
             <CardFooter>

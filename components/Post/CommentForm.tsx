@@ -2,6 +2,7 @@
 import { createCommentOnPost } from '@/lib/api';
 import React, { useState } from 'react';
 import { Textarea } from '../ui/textarea';
+import { SendHorizonal } from 'lucide-react';
 import { Button } from '../ui/button';
 
 interface CommentFormProps {
@@ -33,20 +34,23 @@ const CommentForm: React.FC<CommentFormProps> = ({
 
     return (
         <form onSubmit={handleSubmit} className='mt-4 space-y-2'>
-            <Textarea
-                className='w-full rounded border p-2 text-sm'
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder='What do you think of this? '
-                rows={2}
-            />
-            <Button
-                type='submit'
-                disabled={loading}
-                className='rounded bg-black px-4 py-1.5 text-white hover:opacity-80 disabled:opacity-50'
-            >
-                {loading ? 'Posting...' : 'Comment'}
-            </Button>
+            <div className='flex w-full items-end'>
+                <Textarea
+                    className='max-h-[40px] min-h-[40px] flex-1 resize-none rounded border p-2 text-sm'
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    placeholder='What do you think of this? '
+                    rows={2}
+                    maxLength={160}
+                />
+                <Button
+                    type='submit'
+                    disabled={loading}
+                    className='max-h-[40px] min-h-[40px] rounded bg-black px-4 py-1.5 text-white hover:opacity-80 disabled:opacity-50'
+                >
+                    {loading ? 'Posting...' : <SendHorizonal />}
+                </Button>
+            </div>
         </form>
     );
 };

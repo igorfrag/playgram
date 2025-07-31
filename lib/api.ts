@@ -1,20 +1,4 @@
-export type Post = {
-    id: number;
-    userId: number;
-    caption: string;
-    imageUrl: string;
-    likesCount: number;
-    commentsCount: number;
-    createdAt: string;
-    isLiked: boolean;
-    user: UserPreview;
-};
-
-type UserPreview = {
-    id: number;
-    username: string;
-    profilePicture: string | 'public/user/avatar.jpg';
-};
+import type { Post, UserPreview } from '@/types';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
