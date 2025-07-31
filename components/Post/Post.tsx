@@ -16,12 +16,18 @@ import { LikeButton } from './LikeButton';
 import CommentList from './CommentList';
 import { CommentButton } from './CommentButton';
 import CommentForm from './CommentForm';
+import { Heart } from 'lucide-react';
 
 interface PostProps {
     post: PostType;
     guildname?: string;
     comments: Comment[];
+    isLiked: boolean;
+    likesCount: number;
     onCommentPosted: () => void;
+    onDoubleClick: () => void;
+    onLike: () => void;
+    showLikeAnimation: boolean;
 }
 
 const Post: React.FC<PostProps> = ({
@@ -29,17 +35,13 @@ const Post: React.FC<PostProps> = ({
     guildname = 'Guild',
     comments,
     onCommentPosted,
+    onDoubleClick,
+    isLiked,
+    likesCount,
+    onLike,
+    showLikeAnimation,
 }) => {
-    const {
-        id,
-        user,
-        caption,
-        imageUrl,
-        createdAt,
-        commentsCount,
-        likesCount,
-        isLiked,
-    } = post;
+    const { id, user, caption, imageUrl, createdAt } = post;
 
     const [showComments, setShowComments] = useState(false);
 
@@ -71,18 +73,29 @@ const Post: React.FC<PostProps> = ({
                     <Button>Follow</Button>
                 </CardAction>
             </CardHeader>
-            <CardContent className='aspect-square w-full overflow-hidden max-sm:px-0'>
+            <CardContent
+                className='relative aspect-square w-full touch-none select-none overflow-hidden max-sm:px-0'
+                onDoubleClick={onDoubleClick}
+            >
                 <img
                     src={process.env.NEXT_PUBLIC_API_URL + imageUrl}
                     alt='Post'
                     className='h-full w-full object-cover'
                 />
+                {showLikeAnimation && (
+                    <div className='-translate-1/2 pointer-events-none absolute inset-0 left-1/2 top-1/2 flex items-center justify-center'>
+                        <Heart
+                            className='aspect-square animate-ping fill-white stroke-white duration-500'
+                            size={100}
+                        />
+                    </div>
+                )}
             </CardContent>
             <CardContent className='max-sm: flex items-center justify-center gap-5'>
                 <LikeButton
-                    postId={id}
                     isLiked={isLiked}
                     likesCount={likesCount}
+                    onLike={onLike}
                 />
                 <CommentButton
                     postId={id}
