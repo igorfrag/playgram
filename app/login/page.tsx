@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react';
 export default function LoginPage() {
     const [isRegistering, setIsRegistering] = useState(false);
     const { isAuthenticated, isLoading } = useAuth();
-    console.log(isAuthenticated);
     const router = useRouter();
     useEffect(() => {
         if (!isLoading && isAuthenticated) {

@@ -29,7 +29,6 @@ const NewPostForm = () => {
         formData.append('caption', caption);
         try {
             const data = await createNewPost(caption, image);
-            console.log('Post criado com sucesso:', data);
             router.push(`/post/${data.id}`);
         } catch (error) {
             console.error('Erro ao criar post:', error);
