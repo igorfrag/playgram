@@ -141,12 +141,19 @@ export const togglePostLike = async (postId: number) => {
 // -------------- COMMENTS --------------------
 
 //============ GET POST COMMENTS  ============
-export async function getCommentsByPostId(postId: number) {
-    const res = await fetch(`${apiUrl}comments/${postId}`, {
-        method: 'GET',
-        credentials: 'include',
-        cache: 'no-store',
-    });
+export async function getCommentsByPostId(
+    postId: number,
+    skip: number,
+    take: number
+) {
+    const res = await fetch(
+        `${apiUrl}comments/${postId}?skip=${skip}&take=${take}`,
+        {
+            method: 'GET',
+            credentials: 'include',
+            cache: 'no-store',
+        }
+    );
 
     if (!res.ok) {
         throw new Error('Error fetching comments');
@@ -172,7 +179,6 @@ export const createCommentOnPost = async (postId: number, content: string) => {
         throw new Error(err.error || 'Error commenting on post');
     }
     const result = await res.json();
-    console.log(result);
     return result.data;
 };
 

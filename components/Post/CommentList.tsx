@@ -4,19 +4,20 @@ import type { Comment } from '@/types';
 
 interface CommentListProps {
     comments: Comment[];
+    className?: string;
 }
 
-const CommentList: React.FC<CommentListProps> = ({ comments }) => {
+const CommentList: React.FC<CommentListProps> = ({ comments, className }) => {
     return (
         <>
-            <div className='mt-4 space-y-3 max-sm:space-y-0'>
+            <div className={`mt-4 space-y-3 max-sm:space-y-0 ${className}`}>
                 {comments.map((comment) => (
-                    <div key={comment.id} className='flex gap-2'>
+                    <div key={comment.id} className='flex gap-2 pb-2'>
                         <a href={`/profile/${comment.user.id}`}>
                             <img
                                 src={
                                     comment.user.profilePicture ||
-                                    '/default-avatar.png'
+                                    '/user/avatar.jpg'
                                 }
                                 className='w-12 rounded-full max-sm:max-w-[30px]'
                             />
@@ -25,10 +26,10 @@ const CommentList: React.FC<CommentListProps> = ({ comments }) => {
                             <a href={`/profile/${comment.user.id}`}>
                                 <strong>{comment.user.username}</strong>
                             </a>
-                            <p>{comment.content}</p>
-                            <small className='text-xs text-gray-500'>
+                            <small className='pl-2 text-xs text-gray-500'>
                                 {formatTimeAgo(comment.createdAt)}
                             </small>
+                            <p>{comment.content}</p>
                         </div>
                     </div>
                 ))}

@@ -15,8 +15,9 @@ import type { Comment, Post as PostType } from '@/types';
 import { LikeButton } from './LikeButton';
 import CommentList from './CommentList';
 import { CommentButton } from './CommentButton';
-import CommentForm from './CommentForm';
 import { Heart } from 'lucide-react';
+import CommentDrawer from './CommentDrawer';
+import { Drawer, DrawerTrigger } from '../ui/drawer';
 
 interface PostProps {
     post: PostType;
@@ -41,13 +42,10 @@ const Post: React.FC<PostProps> = ({
     onLike,
     showLikeAnimation,
 }) => {
-    const { id, user, caption, imageUrl, createdAt } = post;
-
-    const [showComments, setShowComments] = useState(false);
-
-    const handleToggleComments = () => {
-        setShowComments((prev) => !prev);
-    };
+    const { id, user, caption, imageUrl, createdAt, commentsCount } = post;
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const openDrawer = () => setDrawerOpen(true);
+    const closeDrawer = () => setDrawerOpen(false);
 
     return (
         <Card className='w-3/4 max-sm:w-full max-sm:gap-1 max-sm:rounded-none max-sm:border-0 max-sm:border-t-2'>
@@ -99,8 +97,8 @@ const Post: React.FC<PostProps> = ({
                 />
                 <CommentButton
                     postId={id}
-                    commentsCount={comments.length}
-                    onToggle={handleToggleComments}
+                    commentsCount={commentsCount}
+                    onToggle={openDrawer}
                 />
             </CardContent>
 
@@ -113,13 +111,26 @@ const Post: React.FC<PostProps> = ({
                 </p>
             </CardContent>
             <CardContent>
-                {showComments && (
-                    <CommentForm
+                <CommentList comments={comments} />
+                <Drawer>
+                    <DrawerTrigger asChild>
+                        <span
+                            onClick={() => setDrawerOpen(true)}
+                            className='cursor-pointer'
+                        >
+                            {commentsCount > 0
+                                ? 'See all comments'
+                                : 'Be the first to comment'}
+                        </span>
+                    </DrawerTrigger>
+
+                    <CommentDrawer
                         postId={id}
                         onCommentPosted={onCommentPosted}
+                        isOpen={drawerOpen}
+                        onClose={closeDrawer}
                     />
-                )}
-                <CommentList comments={comments} />
+                </Drawer>
             </CardContent>
 
             <CardFooter>

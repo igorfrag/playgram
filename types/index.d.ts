@@ -14,6 +14,7 @@ export type Comment = {
     id: number;
     content: string;
     createdAt: string;
+    likesCount: number;
     user: {
         id: number;
         username: string;

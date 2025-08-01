@@ -4,10 +4,11 @@ import React, { useState } from 'react';
 import { Textarea } from '../ui/textarea';
 import { SendHorizonal } from 'lucide-react';
 import { Button } from '../ui/button';
+import { Comment } from '@/types';
 
 interface CommentFormProps {
     postId: number;
-    onCommentPosted: () => void;
+    onCommentPosted: (comment: Comment) => void;
 }
 
 const CommentForm: React.FC<CommentFormProps> = ({
@@ -22,9 +23,9 @@ const CommentForm: React.FC<CommentFormProps> = ({
 
         setLoading(true);
         try {
-            await createCommentOnPost(postId, content);
+            const data = await createCommentOnPost(postId, content);
             setContent('');
-            onCommentPosted();
+            onCommentPosted(data);
         } catch (err) {
             console.error('Error posting comment:', err);
         } finally {
@@ -36,7 +37,7 @@ const CommentForm: React.FC<CommentFormProps> = ({
         <form onSubmit={handleSubmit} className='mt-4 space-y-2'>
             <div className='flex w-full items-end'>
                 <Textarea
-                    className='max-h-[40px] min-h-[40px] flex-1 resize-none rounded border p-2 text-sm'
+                    className='max-h-[40px] min-h-[40px] flex-1 resize-none rounded border-t-2 p-2 text-sm'
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     placeholder='What do you think of this? '

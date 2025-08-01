@@ -7,7 +7,7 @@ import Post from '@/components/Post/Post';
 
 const PostContainer = ({ postId }: { postId: number }) => {
     const [post, setPost] = useState<PostType | null>(null);
-    const [comments, setComments] = useState<Comment[]>([]);
+    const [previewComments, setPreviewComments] = useState<Comment[]>([]);
     const [loading, setLoading] = useState(true);
     const [liked, setLiked] = useState(post?.isLiked || false);
     const [likesCount, setLikesCount] = useState(post?.likesCount || 0);
@@ -17,6 +17,8 @@ const PostContainer = ({ postId }: { postId: number }) => {
         try {
             const data = await getPostById(postId);
             setPost(data);
+            setLiked(data.isLiked);
+            setLikesCount(data.likesCount);
         } catch (error) {
             console.error(error);
         } finally {
@@ -24,20 +26,22 @@ const PostContainer = ({ postId }: { postId: number }) => {
         }
     };
 
-    const fetchComments = async () => {
+    const fetchPreviewComments = async () => {
         try {
-            const data = await getCommentsByPostId(postId);
-            setComments(data);
+            const data = await getCommentsByPostId(postId, 0, 2);
+            setPreviewComments(data);
         } catch (error) {
             console.error(error);
         }
     };
     const handleCommentPosted = async () => {
-        await fetchComments();
+        setPost((prev) =>
+            prev ? { ...prev, commentsCount: prev.commentsCount + 1 } : prev
+        );
+        fetchPreviewComments();
     };
     const handleLike = async () => {
         if (!post) return;
-
         try {
             await togglePostLike(post.id);
             setLiked((prev) => !prev);
@@ -56,7 +60,7 @@ const PostContainer = ({ postId }: { postId: number }) => {
     useEffect(() => {
         const fetchData = async () => {
             await fetchPost();
-            await fetchComments();
+            await fetchPreviewComments();
             setLoading(false);
         };
         fetchData();
@@ -68,7 +72,7 @@ const PostContainer = ({ postId }: { postId: number }) => {
     return (
         <Post
             post={post}
-            comments={comments}
+            comments={previewComments}
             onCommentPosted={handleCommentPosted}
             isLiked={liked}
             likesCount={likesCount}
