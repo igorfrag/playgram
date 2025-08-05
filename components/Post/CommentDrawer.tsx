@@ -2,30 +2,40 @@
 import React from 'react';
 import { Drawer, DrawerContent, DrawerTitle } from '@/components/ui/drawer';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { Comment } from '@/types';
 import CommentList from './CommentList';
-import usePaginatedComments from '@/hooks/usePaginatedComments';
 import CommentForm from './CommentForm';
 
 interface CommentDrawerProps {
     postId: number;
+    comments: Comment[];
     onCommentPosted: () => void;
     isOpen: boolean;
     onClose: () => void;
+    onCommentLike: (commentId: number) => void;
+    hasMore: boolean;
+    loadingComments: boolean;
+    fetchMore: () => void;
+    addPaginatedComment: (comment: any) => void;
 }
 
 const CommentDrawer: React.FC<CommentDrawerProps> = ({
     postId,
+    comments,
     onCommentPosted,
     onClose,
     isOpen,
+    onCommentLike,
+    hasMore,
+    loadingComments,
+    fetchMore,
+    addPaginatedComment,
 }) => {
-    const { comments, loading, fetchComments, hasMore, addComment } =
-        usePaginatedComments(postId);
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
         const bottomReached = scrollTop + clientHeight >= scrollHeight - 50;
-        if (bottomReached && hasMore && !loading) {
-            fetchComments();
+        if (bottomReached && hasMore && !loadingComments) {
+            fetchMore();
         }
     };
 
@@ -42,9 +52,10 @@ const CommentDrawer: React.FC<CommentDrawerProps> = ({
                         <CommentList
                             className='max-w-5xl p-2'
                             comments={comments}
+                            onCommentLike={onCommentLike}
                         />
 
-                        {loading && (
+                        {loadingComments && (
                             <p className='text-muted-foreground p-3 text-center text-sm'>
                                 Loading comments...
                             </p>
@@ -57,7 +68,7 @@ const CommentDrawer: React.FC<CommentDrawerProps> = ({
                     postId={postId}
                     onCommentPosted={(newComment) => {
                         onCommentPosted();
-                        addComment(newComment);
+                        addPaginatedComment(newComment);
                     }}
                 />
             </DrawerContent>

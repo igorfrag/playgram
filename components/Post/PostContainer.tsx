@@ -1,9 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getCommentsByPostId, getPostById, togglePostLike } from '@/lib/api';
+import {
+    getCommentsByPostId,
+    getPostById,
+    toggleCommentLike,
+    togglePostLike,
+} from '@/lib/api';
 import type { Comment, Post as PostType } from '@/types';
 import Post from '@/components/Post/Post';
+import usePaginatedComments from '@/hooks/usePaginatedComments';
 
 const PostContainer = ({ postId }: { postId: number }) => {
     const [post, setPost] = useState<PostType | null>(null);
@@ -12,6 +18,14 @@ const PostContainer = ({ postId }: { postId: number }) => {
     const [liked, setLiked] = useState(post?.isLiked || false);
     const [likesCount, setLikesCount] = useState(post?.likesCount || 0);
     const [showLikeAnimation, setShowLikeAnimation] = useState(false);
+    const {
+        comments,
+        loadingComments,
+        fetchComments,
+        hasMore,
+        addComment,
+        updateIsLiked,
+    } = usePaginatedComments(postId);
 
     const fetchPost = async () => {
         try {
@@ -51,6 +65,19 @@ const PostContainer = ({ postId }: { postId: number }) => {
         }
     };
 
+    const handleToggleCommentLike = async (commentId: number) => {
+        console.log('disparou');
+        if (!commentId) return;
+        updateIsLiked(commentId);
+        try {
+            await toggleCommentLike(commentId);
+            fetchPreviewComments();
+        } catch (error) {
+            updateIsLiked(commentId);
+            console.error('Failed to like comment:', error);
+        }
+    };
+
     const handleDoubleClick = () => {
         if (!liked) handleLike();
         setShowLikeAnimation(true);
@@ -72,13 +99,19 @@ const PostContainer = ({ postId }: { postId: number }) => {
     return (
         <Post
             post={post}
-            comments={previewComments}
+            previewComments={previewComments}
             onCommentPosted={handleCommentPosted}
             isLiked={liked}
             likesCount={likesCount}
             onLike={handleLike}
+            onCommentLike={handleToggleCommentLike}
             onDoubleClick={handleDoubleClick}
             showLikeAnimation={showLikeAnimation}
+            hasMore={hasMore}
+            fetchMore={fetchComments}
+            loadingComments={loadingComments}
+            addPaginatedComment={addComment}
+            paginatedComments={comments}
         />
     );
 };

@@ -22,25 +22,37 @@ import { Drawer, DrawerTrigger } from '../ui/drawer';
 interface PostProps {
     post: PostType;
     guildname?: string;
-    comments: Comment[];
+    previewComments: Comment[];
+    paginatedComments: Comment[];
     isLiked: boolean;
     likesCount: number;
     onCommentPosted: () => void;
     onDoubleClick: () => void;
     onLike: () => void;
+    onCommentLike: (commentId: number) => void;
     showLikeAnimation: boolean;
+    hasMore: boolean;
+    fetchMore: () => void;
+    loadingComments: boolean;
+    addPaginatedComment: (comment: Comment) => void;
 }
 
 const Post: React.FC<PostProps> = ({
     post,
     guildname = 'Guild',
-    comments,
+    previewComments,
     onCommentPosted,
     onDoubleClick,
     isLiked,
     likesCount,
     onLike,
     showLikeAnimation,
+    onCommentLike,
+    hasMore,
+    fetchMore,
+    loadingComments,
+    paginatedComments,
+    addPaginatedComment,
 }) => {
     const { id, user, caption, imageUrl, createdAt, commentsCount } = post;
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -110,8 +122,11 @@ const Post: React.FC<PostProps> = ({
                     {caption}
                 </p>
             </CardContent>
-            <CardContent>
-                <CommentList comments={comments} />
+            <CardContent className='max-sm:px-2'>
+                <CommentList
+                    comments={previewComments}
+                    onCommentLike={onCommentLike}
+                />
                 <Drawer>
                     <DrawerTrigger asChild>
                         <span
@@ -129,6 +144,12 @@ const Post: React.FC<PostProps> = ({
                         onCommentPosted={onCommentPosted}
                         isOpen={drawerOpen}
                         onClose={closeDrawer}
+                        onCommentLike={onCommentLike}
+                        hasMore={hasMore}
+                        fetchMore={fetchMore}
+                        loadingComments={loadingComments}
+                        comments={paginatedComments}
+                        addPaginatedComment={addPaginatedComment}
                     />
                 </Drawer>
             </CardContent>

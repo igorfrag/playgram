@@ -20,6 +20,7 @@ export type Comment = {
         username: string;
         profilePicture?: string;
     };
+    isLiked: boolean;
 };
 
 type UserPreview = {

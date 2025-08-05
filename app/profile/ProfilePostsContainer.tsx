@@ -43,6 +43,7 @@ const ProfilePostsContainer: React.FC<ProfilePostsContainerProp> = ({
                         postLikes={post.likesCount}
                         imageUrl={post.imageUrl}
                         caption={post.caption}
+                        postId={post.id}
                     />
                 );
             })}

@@ -182,6 +182,21 @@ export const createCommentOnPost = async (postId: number, content: string) => {
     return result.data;
 };
 
+//============ COMMENTS TOGGLE LIKE  ============
+export const toggleCommentLike = async (commentId: number) => {
+    const res = await fetch(`${apiUrl}comments/${commentId}/like`, {
+        method: 'POST',
+        credentials: 'include',
+        cache: 'no-store',
+    });
+
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Error liking/unliking comment');
+    }
+    return res.json();
+};
+
 // -------------- USERS --------------------
 
 export const getUserById = async (id: number): Promise<UserPreview> => {
