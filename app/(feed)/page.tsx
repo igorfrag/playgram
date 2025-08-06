@@ -1,9 +1,15 @@
-import FeedContainer from './FeedContainer';
+'use client';
+import { useAuth } from '@/context/AuthContext';
 
-export default function Home() {
-    return (
-        <div className='bg-background mx-auto flex h-screen max-w-5xl flex-col items-center'>
-            <FeedContainer />
-        </div>
-    );
+import FeedContainer from '../(feed)/FeedContainer';
+import LoginContainer from '../(login)/LoginContainer';
+
+export default function LoginPage() {
+    const { isAuthenticated, isLoading } = useAuth();
+
+    if (isLoading) {
+        return <></>;
+    }
+
+    return isAuthenticated ? <FeedContainer /> : <LoginContainer />;
 }

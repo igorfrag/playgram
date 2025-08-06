@@ -51,7 +51,7 @@ export function SignupForm({ setIsRegistering }: SignupFormProps) {
             if (!loginData) {
                 throw new Error('Login failed');
             }
-            router.push('/');
+            window.location.reload();
         } catch (err) {
             setError('Internal server error');
         }

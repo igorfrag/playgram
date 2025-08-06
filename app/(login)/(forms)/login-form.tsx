@@ -1,6 +1,5 @@
 'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
@@ -22,7 +21,6 @@ export function LoginForm({ setIsRegistering }: LoginFormProps) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -34,7 +32,7 @@ export function LoginForm({ setIsRegistering }: LoginFormProps) {
                 return;
             }
 
-            router.push('/');
+            window.location.reload();
         } catch (err) {
             setError('Internal server error');
         }

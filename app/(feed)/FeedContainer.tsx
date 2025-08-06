@@ -29,11 +29,11 @@ const FeedContainer: React.FC<FeedContainerProps> = ({}) => {
     if (!posts) return <p>Failed to fetch Feed</p>;
 
     return (
-        <>
+        <div className='bg-background mx-auto flex h-screen max-w-5xl flex-col items-center'>
             {posts.map((post, index) => {
                 return <PostContainer postId={post.id} key={index} />;
             })}
-        </>
+        </div>
     );
 };
 

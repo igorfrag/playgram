@@ -24,6 +24,21 @@ export const loginUser = async (email: string, password: string) => {
     return data.user;
 };
 
+// ============ LOGOUT  ============
+export const logoutUser = async () => {
+    const res = await fetch(`${apiUrl}` + `users/logout`, {
+        method: 'POST',
+        credentials: 'include',
+    });
+
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Logout failed');
+    }
+
+    return res;
+};
+
 // ============ REGISTER  ============
 export const registerUser = async (
     email: string,
